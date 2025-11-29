@@ -1,4 +1,4 @@
-import { Telegraf, Markup } from "telegraf";
+import { Telegraf } from "telegraf";
 
 const bot = new Telegraf("7483133104:AAHNctCp8xKXxWwHGo-CFo_hb13iM9wz-mY");
 
