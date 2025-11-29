@@ -53,7 +53,7 @@ bot.on("new_chat_members", async (ctx) => {
 // Start command
 bot.command("start", async (ctx) => {
   await ctx.reply(
-    "🤖 *Group Controller Bot*\n\n" +
+    "*Group Controller Bot*\n\n" +
       "I help manage your Telegram groups!\n\n" +
       "*Admin Commands:*\n" +
       "/kick - Kick a user\n" +
@@ -82,7 +82,7 @@ bot.command("start", async (ctx) => {
 // Help command
 bot.command("help", async (ctx) => {
   await ctx.reply(
-    "📚 *Help Menu*\n\n" +
+    "*Help Menu*\n\n" +
       "*For Users:*\n" +
       "/rules - View group rules\n" +
       "/info - Get information about a user\n\n" +
@@ -100,21 +100,21 @@ bot.command("kick", async (ctx) => {
 
   const isUserAdmin = await isAdmin(ctx, ctx.from.id);
   if (!isUserAdmin) {
-    return ctx.reply("❌ You need to be an admin to use this command!");
+    return ctx.reply("You need to be an admin to use this command!");
   }
 
   const userId = ctx.message.reply_to_message?.from.id;
   if (!userId) {
-    return ctx.reply("❌ Reply to a user's message to kick them!");
+    return ctx.reply("Reply to a user's message to kick them!");
   }
 
   try {
     await ctx.telegram.banChatMember(ctx.chat.id, userId);
     await ctx.telegram.unbanChatMember(ctx.chat.id, userId);
     const user = ctx.message.reply_to_message.from;
-    await ctx.reply(`✅ ${getUserMention(user)} has been kicked!`);
+    await ctx.reply(`${getUserMention(user)} has been kicked!`);
   } catch (error) {
-    await ctx.reply("❌ Failed to kick user. Make sure I have admin rights!");
+    await ctx.reply("Failed to kick user. Make sure I have admin rights!");
   }
 });
 
@@ -131,15 +131,15 @@ bot.command("ban", async (ctx) => {
 
   const userId = ctx.message.reply_to_message?.from.id;
   if (!userId) {
-    return ctx.reply("❌ Reply to a user's message to ban them!");
+    return ctx.reply("Reply to a user's message to ban them!");
   }
 
   try {
     await ctx.telegram.banChatMember(ctx.chat.id, userId);
     const user = ctx.message.reply_to_message.from;
-    await ctx.reply(`🔨 ${getUserMention(user)} has been banned!`);
+    await ctx.reply(`${getUserMention(user)} has been banned!`);
   } catch (error) {
-    await ctx.reply("❌ Failed to ban user. Make sure I have admin rights!");
+    await ctx.reply("Failed to ban user. Make sure I have admin rights!");
   }
 });
 
@@ -156,15 +156,15 @@ bot.command("unban", async (ctx) => {
 
   const userId = ctx.message.reply_to_message?.from.id;
   if (!userId) {
-    return ctx.reply("❌ Reply to a user's message to unban them!");
+    return ctx.reply("Reply to a user's message to unban them!");
   }
 
   try {
     await ctx.telegram.unbanChatMember(ctx.chat.id, userId);
     const user = ctx.message.reply_to_message.from;
-    await ctx.reply(`✅ ${getUserMention(user)} has been unbanned!`);
+    await ctx.reply(`${getUserMention(user)} has been unbanned!`);
   } catch (error) {
-    await ctx.reply("❌ Failed to unban user.");
+    await ctx.reply("Failed to unban user.");
   }
 });
 
@@ -181,7 +181,7 @@ bot.command("mute", async (ctx) => {
 
   const userId = ctx.message.reply_to_message?.from.id;
   if (!userId) {
-    return ctx.reply("❌ Reply to a user's message to mute them!");
+    return ctx.reply("Reply to a user's message to mute them!");
   }
 
   try {
@@ -198,9 +198,9 @@ bot.command("mute", async (ctx) => {
       },
     });
     const user = ctx.message.reply_to_message.from;
-    await ctx.reply(`🔇 ${getUserMention(user)} has been muted!`);
+    await ctx.reply(`${getUserMention(user)} has been muted!`);
   } catch (error) {
-    await ctx.reply("❌ Failed to mute user. Make sure I have admin rights!");
+    await ctx.reply("Failed to mute user. Make sure I have admin rights!");
   }
 });
 
@@ -217,7 +217,7 @@ bot.command("unmute", async (ctx) => {
 
   const userId = ctx.message.reply_to_message?.from.id;
   if (!userId) {
-    return ctx.reply("❌ Reply to a user's message to unmute them!");
+    return ctx.reply("Reply to a user's message to unmute them!");
   }
 
   try {
@@ -234,9 +234,9 @@ bot.command("unmute", async (ctx) => {
       },
     });
     const user = ctx.message.reply_to_message.from;
-    await ctx.reply(`🔊 ${getUserMention(user)} has been unmuted!`);
+    await ctx.reply(`${getUserMention(user)} has been unmuted!`);
   } catch (error) {
-    await ctx.reply("❌ Failed to unmute user.");
+    await ctx.reply("Failed to unmute user.");
   }
 });
 
@@ -255,7 +255,7 @@ bot.command("warn", async (ctx) => {
 
   const userId = ctx.message.reply_to_message?.from.id;
   if (!userId) {
-    return ctx.reply("❌ Reply to a user's message to warn them!");
+    return ctx.reply("Reply to a user's message to warn them!");
   }
 
   const data = getGroupData(ctx.chat.id);
@@ -271,16 +271,16 @@ bot.command("warn", async (ctx) => {
     try {
       await ctx.telegram.banChatMember(ctx.chat.id, userId);
       await ctx.reply(
-        `⚠️ ${getUserMention(user)} has been banned!\n` +
+        `${getUserMention(user)} has been banned!\n` +
           `Reason: Reached maximum warnings (${data.maxWarnings})`
       );
       data.warnings.delete(userId);
     } catch (error) {
-      await ctx.reply("❌ Failed to ban user after max warnings.");
+      await ctx.reply("Failed to ban user after max warnings.");
     }
   } else {
     await ctx.reply(
-      `⚠️ ${getUserMention(user)} has been warned!\n` +
+      `${getUserMention(user)} has been warned!\n` +
         `Warnings: ${newWarnings}/${data.maxWarnings}\n` +
         `Reason: ${reason}`
     );
@@ -299,7 +299,7 @@ bot.command("warnings", async (ctx) => {
   const user = ctx.message.reply_to_message?.from || ctx.from;
 
   await ctx.reply(
-    `⚠️ Warnings for ${getUserMention(user)}: ${warnings}/${data.maxWarnings}`
+    `Warnings for ${getUserMention(user)}: ${warnings}/${data.maxWarnings}`
   );
 });
 
@@ -322,7 +322,7 @@ bot.command("resetwarnings", async (ctx) => {
   const data = getGroupData(ctx.chat.id);
   data.warnings.delete(userId);
   const user = ctx.message.reply_to_message.from;
-  await ctx.reply(`✅ Warnings reset for ${getUserMention(user)}`);
+  await ctx.reply(`Warnings reset for ${getUserMention(user)}`);
 });
 
 // ==================== GROUP SETTINGS ====================
@@ -340,12 +340,12 @@ bot.command("setrules", async (ctx) => {
 
   const rules = ctx.message.text.split(" ").slice(1).join(" ");
   if (!rules) {
-    return ctx.reply("❌ Please provide rules! Usage: /setrules <rules>");
+    return ctx.reply("Please provide rules! Usage: /setrules <rules>");
   }
 
   const data = getGroupData(ctx.chat.id);
   data.rules = rules;
-  await ctx.reply("✅ Group rules have been updated!");
+  await ctx.reply("Group rules have been updated!");
 });
 
 // View rules
@@ -355,7 +355,7 @@ bot.command("rules", async (ctx) => {
   }
 
   const data = getGroupData(ctx.chat.id);
-  await ctx.reply(`📋 *Group Rules:*\n\n${data.rules}`, {
+  await ctx.reply(`*Group Rules:*\n\n${data.rules}`, {
     parse_mode: "Markdown",
   });
 });
@@ -374,13 +374,13 @@ bot.command("setwelcome", async (ctx) => {
   const message = ctx.message.text.split(" ").slice(1).join(" ");
   if (!message) {
     return ctx.reply(
-      "❌ Please provide a welcome message! Use {user} for username.\nUsage: /setwelcome Welcome {user}!"
+      "Please provide a welcome message! Use {user} for username.\nUsage: /setwelcome Welcome {user}!"
     );
   }
 
   const data = getGroupData(ctx.chat.id);
   data.welcomeMessage = message;
-  await ctx.reply("✅ Welcome message has been updated!");
+  await ctx.reply("Welcome message has been updated!");
 });
 
 // ==================== WORD FILTER ====================
@@ -398,12 +398,12 @@ bot.command("addword", async (ctx) => {
 
   const word = ctx.message.text.split(" ").slice(1).join(" ").toLowerCase();
   if (!word) {
-    return ctx.reply("❌ Please provide a word to ban! Usage: /addword <word>");
+    return ctx.reply("Please provide a word to ban! Usage: /addword <word>");
   }
 
   const data = getGroupData(ctx.chat.id);
   data.bannedWords.add(word);
-  await ctx.reply(`✅ Added "${word}" to banned words list!`);
+  await ctx.reply(`Added "${word}" to banned words list!`);
 });
 
 // Remove banned word
@@ -414,21 +414,21 @@ bot.command("removeword", async (ctx) => {
 
   const isUserAdmin = await isAdmin(ctx, ctx.from.id);
   if (!isUserAdmin) {
-    return ctx.reply("❌ You need to be an admin to use this command!");
+    return ctx.reply("You need to be an admin to use this command!");
   }
 
   const word = ctx.message.text.split(" ").slice(1).join(" ").toLowerCase();
   if (!word) {
     return ctx.reply(
-      "❌ Please provide a word to remove! Usage: /removeword <word>"
+      "Please provide a word to remove! Usage: /removeword <word>"
     );
   }
 
   const data = getGroupData(ctx.chat.id);
   if (data.bannedWords.delete(word)) {
-    await ctx.reply(`✅ Removed "${word}" from banned words list!`);
+    await ctx.reply(`Removed "${word}" from banned words list!`);
   } else {
-    await ctx.reply(`❌ "${word}" is not in the banned words list!`);
+    await ctx.reply(`"${word}" is not in the banned words list!`);
   }
 });
 
@@ -445,11 +445,11 @@ bot.command("listwords", async (ctx) => {
 
   const data = getGroupData(ctx.chat.id);
   if (data.bannedWords.size === 0) {
-    return ctx.reply("📝 No banned words set!");
+    return ctx.reply("No banned words set!");
   }
 
   const words = Array.from(data.bannedWords).join(", ");
-  await ctx.reply(`📝 *Banned Words:*\n${words}`, { parse_mode: "Markdown" });
+  await ctx.reply(`*Banned Words:*\n${words}`, { parse_mode: "Markdown" });
 });
 
 // Check messages for banned words
@@ -468,9 +468,7 @@ bot.on("text", async (ctx, next) => {
         try {
           await ctx.deleteMessage();
           await ctx.reply(
-            `⚠️ ${getUserMention(
-              ctx.from
-            )}, your message contained a banned word!`
+            `${getUserMention(ctx.from)}, your message contained a banned word!`
           );
         } catch (error) {
           console.error("Failed to delete message:", error);
@@ -498,14 +496,14 @@ bot.command("pin", async (ctx) => {
 
   const messageId = ctx.message.reply_to_message?.message_id;
   if (!messageId) {
-    return ctx.reply("❌ Reply to a message to pin it!");
+    return ctx.reply("Reply to a message to pin it!");
   }
 
   try {
     await ctx.telegram.pinChatMessage(ctx.chat.id, messageId);
-    await ctx.reply("📌 Message pinned!");
+    await ctx.reply("Message pinned!");
   } catch (error) {
-    await ctx.reply("❌ Failed to pin message. Make sure I have admin rights!");
+    await ctx.reply("Failed to pin message. Make sure I have admin rights!");
   }
 });
 
@@ -522,9 +520,9 @@ bot.command("unpin", async (ctx) => {
 
   try {
     await ctx.telegram.unpinChatMessage(ctx.chat.id);
-    await ctx.reply("📌 Message unpinned!");
+    await ctx.reply("Message unpinned!");
   } catch (error) {
-    await ctx.reply("❌ Failed to unpin message.");
+    await ctx.reply("Failed to unpin message.");
   }
 });
 
@@ -533,7 +531,7 @@ bot.command("info", async (ctx) => {
   const user = ctx.message.reply_to_message?.from || ctx.from;
   const userId = user.id;
 
-  let info = `👤 *User Info*\n\n`;
+  let info = `*User Info*\n\n`;
   info += `Name: ${user.first_name}`;
   if (user.last_name) info += ` ${user.last_name}`;
   info += `\nID: \`${userId}\``;
@@ -555,16 +553,16 @@ bot.command("info", async (ctx) => {
 
 bot.catch((err, ctx) => {
   console.error("Bot error:", err);
-  ctx.reply("❌ An error occurred while processing your request.");
+  ctx.reply("An error occurred while processing your request.");
 });
 
 // ==================== START BOT ====================
 
-console.log("🤖 Bot is starting...");
+console.log("Bot is starting...");
 bot
   .launch()
   .then(async () => {
-    console.log("✅ Bot is running!");
+    console.log("Bot is running!");
 
     // Set bot commands for autocomplete menu
     await bot.telegram.setMyCommands([
@@ -597,9 +595,9 @@ bot
       { command: "pin", description: "Pin a message (admin only)" },
       { command: "unpin", description: "Unpin a message (admin only)" },
     ]);
-    console.log("✅ Commands registered!");
+    console.log("Commands registered!");
   })
-  .catch((err) => console.error("❌ Failed to start bot:", err));
+  .catch((err) => console.error("Failed to start bot:", err));
 
 // Enable graceful stop
 process.once("SIGINT", () => bot.stop("SIGINT"));
