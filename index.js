@@ -1,6 +1,11 @@
+import "dotenv/config";
 import { Telegraf } from "telegraf";
 
-const bot = new Telegraf("7483133104:AAHNctCp8xKXxWwHGo-CFo_hb13iM9wz-mY");
+if (!process.env.BOT_TOKEN) {
+  throw new Error("BOT_TOKEN must be provided in .env file");
+}
+
+const bot = new Telegraf(process.env.BOT_TOKEN);
 
 // Store for warnings, banned words, and group settings
 const groupData = new Map();
