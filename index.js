@@ -274,14 +274,41 @@ bot.command("warn", async (ctx) => {
 
   if (newWarnings >= data.maxWarnings) {
     try {
-      await ctx.telegram.banChatMember(ctx.chat.id, userId);
+      const untilDate = Math.floor(Date.now() / 1000) + 3600; // 1 hour from now
+      await ctx.telegram.restrictChatMember(ctx.chat.id, userId, {
+        permissions: {
+          can_send_messages: false,
+          can_send_media_messages: false,
+          can_send_polls: false,
+          can_send_other_messages: false,
+          can_add_web_page_previews: false,
+          can_change_info: false,
+          can_invite_users: false,
+          can_pin_messages: false,
+        },
+        until_date: untilDate,
+      });
+
+      const unmuteTime = new Date(untilDate * 1000).toLocaleTimeString(
+        "en-US",
+        {
+          timeZone: "Asia/Kolkata", // Adjust timezone as needed or make it dynamic
+          hour: "2-digit",
+          minute: "2-digit",
+        }
+      );
+
       await ctx.reply(
-        `${getUserMention(user)} has been banned!\n` +
-          `Reason: Reached maximum warnings (${data.maxWarnings})`
+        `${getUserMention(user)} has been muted for 1 hour!\n` +
+          `Reason: Reached maximum warnings (${data.maxWarnings})\n` +
+          `They will be unmuted at ${unmuteTime}`
       );
       data.warnings.delete(userId);
     } catch (error) {
-      await ctx.reply("Failed to ban user after max warnings.");
+      console.error("Failed to mute user:", error);
+      await ctx.reply(
+        "Failed to mute user after max warnings. Make sure I have admin rights!"
+      );
     }
   } else {
     await ctx.reply(
